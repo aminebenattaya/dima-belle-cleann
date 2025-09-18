@@ -212,7 +212,7 @@ export default function ProductDetails({ productSlug }: { productSlug: string })
   return (
     <div className="space-y-12">
       <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
-        <div className="flex flex-col gap-4 sticky top-24">
+        <div className="flex flex-col gap-4 md:sticky top-24">
           <div className="aspect-square md:aspect-[3/4] relative w-full rounded-lg overflow-hidden shadow-xl bg-muted/30">
             <Image
               src={displayImageUrl}
