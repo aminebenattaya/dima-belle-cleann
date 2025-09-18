@@ -2,13 +2,19 @@
 import admin from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
-import serviceAccount from '../../firebase-admin.json';
+
+// Configuration using environment variables
+const firebaseAdminConfig = {
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+};
 
 // Ensure Firebase is only initialized once
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-    databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`, // Activated for robust initialization
+    credential: admin.credential.cert(firebaseAdminConfig as admin.ServiceAccount),
+    databaseURL: `https://${firebaseAdminConfig.projectId}.firebaseio.com`,
   });
 }
 
