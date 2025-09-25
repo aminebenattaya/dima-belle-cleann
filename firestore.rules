@@ -1,0 +1,68 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check for admin custom claim
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Helper function to check if the user is the owner of the document
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Products can be read by anyone, but only written by an admin
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Blog posts can be read by anyone, but only written by an admin
+    match /blogPosts/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Gallery items can be read by anyone if approved
+    // New submissions can be created by any authenticated user
+    // Admins can update/delete
+    match /galleryItems/{itemId} {
+      allow read: if resource.data.isApproved == true || isAdmin();
+      allow create: if request.auth != null; // Anyone logged in can submit
+      allow update, delete: if isAdmin();
+    }
+
+    // Orders:
+    // - Creation: Any authenticated user can create their own order.
+    // - Reading: Users can only read their own orders. Admins can read all orders.
+    // - Updating: Only admins can update orders (e.g., change status).
+    // - Deletion: Disallowed for safety.
+    match /orders/{orderId} {
+      allow create: if isOwner(request.resource.data.userId);
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow update: if isAdmin();
+      allow delete: if false; // Protect order history
+    }
+
+    // User profiles:
+    // - Creation/Reading/Updating: Users can manage their own profile.
+    // - Admins can read all profiles for support purposes.
+    // - Admins cannot write to other user profiles to prevent accidental data loss.
+    match /users/{userId} {
+      allow read, update, create: if isOwner(userId);
+      allow list: if isAdmin(); // Admin can list users, e.g., for a user management page.
+    }
+    
+    // Sales Analytics can only be read and written by admins.
+    match /salesAnalytics/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Site Configuration can only be read and written by admins.
+    match /siteConfiguration/{docId} {
+        allow read, write: if isAdmin();
+    }
+  }
+}
