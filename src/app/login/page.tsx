@@ -1,8 +1,9 @@
 // src/app/login/page.tsx
+'use client';
+
 import { Suspense } from 'react';
-import 'server-only';
 import PageHeader from '@/components/shared/PageHeader';
-import LoginForm from '@/components/auth/LoginForm'; // Change to email login form
+import LoginForm from '@/components/auth/LoginForm';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 
