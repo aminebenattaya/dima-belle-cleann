@@ -1,6 +1,7 @@
+
 // src/services/productService.ts
 import { db } from '@/lib/firebase';
-import type { Product } from '@/lib/types';
+import type { Product, CategoryWithImage } from '@/lib/types';
 import { 
   collection, getDocs, doc, getDoc, query, 
   limit as firestoreLimit, addDoc, Timestamp, 
@@ -156,24 +157,31 @@ export async function getProducts(filters?: {
 }
 
 /**
- * Fetches all products and returns a list of unique categories that have products.
- * @returns {Promise<string[]>} A promise that resolves to an array of active category names.
+ * Fetches all products and returns a list of unique categories that have products,
+ * along with a representative image for each category.
+ * @returns {Promise<CategoryWithImage[]>} A promise that resolves to an array of category objects.
  */
-export async function getActiveCategories(): Promise<string[]> {
+export async function getActiveCategoriesWithImages(): Promise<CategoryWithImage[]> {
   try {
     const products = await getProducts();
-    const categoryCounts = products.reduce((acc, product) => {
-      acc[product.category] = (acc[product.category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const categoriesMap: Map<string, CategoryWithImage> = new Map();
 
-    // Filter out categories with 0 products and return the names
-    return Object.keys(categoryCounts).filter(category => categoryCounts[category] > 0);
+    for (const product of products) {
+      if (product.category && !categoriesMap.has(product.category)) {
+        categoriesMap.set(product.category, {
+          name: product.category,
+          imageUrl: product.imageUrl,
+        });
+      }
+    }
+    
+    return Array.from(categoriesMap.values());
   } catch (error) {
-    console.error("Error fetching active categories:", error);
+    console.error("Error fetching active categories with images:", error);
     return [];
   }
 }
+
 
 
 export async function getProductById(id: string): Promise<Product | null> {
