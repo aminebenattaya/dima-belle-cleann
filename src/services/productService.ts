@@ -155,6 +155,27 @@ export async function getProducts(filters?: {
   }
 }
 
+/**
+ * Fetches all products and returns a list of unique categories that have products.
+ * @returns {Promise<string[]>} A promise that resolves to an array of active category names.
+ */
+export async function getActiveCategories(): Promise<string[]> {
+  try {
+    const products = await getProducts();
+    const categoryCounts = products.reduce((acc, product) => {
+      acc[product.category] = (acc[product.category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Filter out categories with 0 products and return the names
+    return Object.keys(categoryCounts).filter(category => categoryCounts[category] > 0);
+  } catch (error) {
+    console.error("Error fetching active categories:", error);
+    return [];
+  }
+}
+
+
 export async function getProductById(id: string): Promise<Product | null> {
   try {
     const productDocRef = doc(db, PRODUCTS_COLLECTION, id);
