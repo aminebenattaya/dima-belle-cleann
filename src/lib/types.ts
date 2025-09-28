@@ -15,7 +15,7 @@ export type Product = {
   id: string; // Firestore document ID
   slug: string; // URL-friendly identifier
   name: string;
-  category: 'Hijab' | 'Turban' | 'Casquette' | 'habillée/soirée' | 'Ensemble' | 'coiffe';
+  category: 'Hijab' | 'Turban' | 'Casquette' | 'coiffe habillé soirée' | 'Ensemble' | 'beréts' | 'turban soirée';
   price: number;
   sizes: string[];  // Stored as an array in Firestore
   imageUrl: string; // Main/default product image used as a fallback or thumbnail
