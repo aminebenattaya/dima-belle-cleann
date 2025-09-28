@@ -55,7 +55,7 @@ export default function ProductView() {
         setAllProducts(products);
         
         setFilterOptions({
-            categories: ['Tout', 'Hijab', 'Turban', 'Casquette', 'Abaya', 'Robe', 'Ensemble'],
+            categories: ['Tout', 'Hijab', 'Turban', 'Casquette', 'habillée/soirée', 'Ensemble', 'coiffe'],
             colors: ['Tout', ...uniqueColors],
             sizes: [],
             priceRange: [0, 200]
