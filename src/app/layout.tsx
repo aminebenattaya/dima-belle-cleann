@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ClientLayout from '@/components/layout/ClientLayout';
+import Script from 'next/script';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -30,10 +31,32 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const facebookAppId = "1348941259719682";
+
   return (
     <html lang="fr" className={`${inter.variable} ${lora.variable}`}>
-      <body className={`font-sans antialiased flex flex-col min-h-screen`}>
-        {/* ClientLayout now only decides if Header/Footer should render, but doesn't render them itself */}
+      <body>
+        <Script id="facebook-jssdk-init" strategy="afterInteractive">
+          {`
+            window.fbAsyncInit = function() {
+              FB.init({
+                appId: '${facebookAppId}',
+                cookie: true,
+                xfbml: true,
+                version: 'v19.0'
+              });
+              FB.AppEvents.logPageView();
+            };
+
+            (function(d, s, id){
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) {return;}
+               js = d.createElement(s); js.id = id;
+               js.src = "https://connect.facebook.net/fr_FR/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+             }(document, 'script', 'facebook-jssdk'));
+          `}
+        </Script>
         <ClientLayout>
           <Header />
           <main className="flex-grow container mx-auto px-4 py-8">
