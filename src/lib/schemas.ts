@@ -39,7 +39,7 @@ export const addProductFormSchema = z.object({
   productName: z.string().min(3, "Le nom du produit doit avoir au moins 3 caractères."),
   slug: z.string().optional(),
   description: z.string().min(10, "La description doit avoir au moins 10 caractères."),
-  category: z.enum(['Hijab', 'Turban', 'Casquette', 'habillée/soirée', 'Ensemble', 'coiffe'], {
+  category: z.enum(['Hijab', 'Turban', 'Casquette', 'coiffe habillé soirée', 'Ensemble', 'beréts', 'turban soirée'], {
     required_error: "La catégorie est requise.",
   }),
   price: z.number().positive("Le prix doit être un nombre positif."),
