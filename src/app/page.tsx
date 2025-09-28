@@ -4,11 +4,10 @@ import Link from 'next/link';
 import ProductCard from '@/components/products/ProductCard';
 import PageHeader from '@/components/shared/PageHeader';
 import { Button } from '@/components/ui/button';
-import { getFeaturedProducts, getNewArrivals, getActiveCategories } from '@/services/productService';
+import { getFeaturedProducts, getNewArrivals, getActiveCategoriesWithImages } from '@/services/productService';
 import type { Metadata } from 'next';
-import type { Product } from '@/lib/types';
-import { ArrowRight, Wind, Shell, ShoppingBag, VenetianMask } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import type { Product, CategoryWithImage } from '@/lib/types';
+import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 
@@ -19,22 +18,11 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-// Category icon mapping
-const categoryIcons: Record<string, LucideIcon> = {
-  'Hijab': Wind,
-  'Turban': Shell,
-  'Casquette': VenetianMask,
-  'Abaya': ShoppingBag,
-  'Robe': ShoppingBag,
-  'Ensemble': ShoppingBag,
-  'Default': ShoppingBag,
-};
-
 
 export default async function HomePage() {
   const featuredProducts: Product[] = await getFeaturedProducts(4);
   const newArrivals: Product[] = await getNewArrivals(3);
-  const activeCategories: string[] = await getActiveCategories();
+  const activeCategories: CategoryWithImage[] = await getActiveCategoriesWithImages();
 
 
   return (
@@ -71,28 +59,29 @@ export default async function HomePage() {
         <section>
           <PageHeader title="Parcourir par Catégorie" description="Trouvez exactement ce que vous cherchez en explorant nos collections." />
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-            {activeCategories.map(category => {
-              const Icon = categoryIcons[category] || categoryIcons['Default'];
-              return (
-                <Link
-                  key={category}
-                  href={`/products?category=${encodeURIComponent(category)}`}
-                  className="group"
-                >
-                  <div className={cn(
-                    "flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-transparent transition-all duration-300",
-                    "bg-muted/40 hover:bg-card hover:border-primary/50 hover:shadow-lg hover:-translate-y-1"
-                  )}>
-                    <div className="p-4 rounded-full bg-primary/10 mb-4">
-                      <Icon className="h-8 w-8 text-primary" />
-                    </div>
-                    <span className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
-                      {category}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+            {activeCategories.map(category => (
+              <Link
+                key={category.name}
+                href={`/products?category=${encodeURIComponent(category.name)}`}
+                className="group relative block overflow-hidden rounded-xl"
+              >
+                <div className="aspect-square w-full">
+                   <Image
+                    src={category.imageUrl}
+                    alt={`Catégorie ${category.name}`}
+                    fill
+                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
+                    className="object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
+                <div className="absolute bottom-0 left-0 w-full p-4 text-center">
+                  <h3 className="text-lg font-semibold text-white shadow-sm">
+                    {category.name}
+                  </h3>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       )}
