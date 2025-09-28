@@ -31,7 +31,7 @@ export default async function HomePage() {
       <section className="relative h-[60vh] md:h-[75vh] w-full rounded-2xl overflow-hidden flex items-center justify-center text-center p-6 bg-card">
         <div className="absolute inset-0 w-full h-full">
             <Image 
-                src="https://res.cloudinary.com/dqcxokqrv/image/upload/v1758809304/By_MYRiam_co._swvefr.jpg"
+                src="https://res.cloudinary.com/dqcxokqrv/image/upload/v1759085680/By_MYRiam_co._swvefr.jpg"
                 alt="Dima Belle collection"
                 fill
                 className="object-cover"
