@@ -55,7 +55,7 @@ export default function ProductView() {
         setAllProducts(products);
         
         setFilterOptions({
-            categories: ['Tout', 'Hijab', 'Turban', 'Casquette', 'habillée/soirée', 'Ensemble', 'coiffe'],
+            categories: ['Tout', 'Hijab', 'Turban', 'Casquette', 'coiffe habillé soirée', 'Ensemble', 'beréts', 'turban soirée'],
             colors: ['Tout', ...uniqueColors],
             sizes: [],
             priceRange: [0, 200]
