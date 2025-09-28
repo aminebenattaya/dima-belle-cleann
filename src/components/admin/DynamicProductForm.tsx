@@ -1,3 +1,4 @@
+
 // src/components/admin/DynamicProductForm.tsx
 'use client';
 
@@ -160,9 +161,9 @@ export default function DynamicProductForm({ product }: DynamicProductFormProps)
                   <SelectItem value="Hijab">Hijab</SelectItem>
                   <SelectItem value="Turban">Turban</SelectItem>
                   <SelectItem value="Casquette">Casquette</SelectItem>
-                   <SelectItem value="Abaya">Abaya</SelectItem>
-                   <SelectItem value="Robe">Robe</SelectItem>
-                   <SelectItem value="Ensemble">Ensemble</SelectItem>
+                  <SelectItem value="habillée/soirée">habillée/soirée</SelectItem>
+                  <SelectItem value="Ensemble">Ensemble</SelectItem>
+                  <SelectItem value="coiffe">coiffe</SelectItem>
                 </SelectContent>
               </Select>
             )}
