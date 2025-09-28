@@ -205,3 +205,8 @@ export type SalesAnalytics = {
   topSellingProducts: ProductSales[];
   lastUpdated: any; // Firestore Timestamp
 };
+
+export type CategoryWithImage = {
+  name: string;
+  imageUrl: string;
+};
