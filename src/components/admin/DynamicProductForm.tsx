@@ -161,9 +161,10 @@ export default function DynamicProductForm({ product }: DynamicProductFormProps)
                   <SelectItem value="Hijab">Hijab</SelectItem>
                   <SelectItem value="Turban">Turban</SelectItem>
                   <SelectItem value="Casquette">Casquette</SelectItem>
-                  <SelectItem value="habillée/soirée">habillée/soirée</SelectItem>
+                  <SelectItem value="coiffe habillé soirée">coiffe habillé soirée</SelectItem>
                   <SelectItem value="Ensemble">Ensemble</SelectItem>
-                  <SelectItem value="coiffe">coiffe</SelectItem>
+                  <SelectItem value="beréts">beréts</SelectItem>
+                  <SelectItem value="turban soirée">turban soirée</SelectItem>
                 </SelectContent>
               </Select>
             )}
