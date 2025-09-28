@@ -4,10 +4,13 @@ import Link from 'next/link';
 import ProductCard from '@/components/products/ProductCard';
 import PageHeader from '@/components/shared/PageHeader';
 import { Button } from '@/components/ui/button';
-import { getFeaturedProducts, getNewArrivals } from '@/services/productService';
+import { getFeaturedProducts, getNewArrivals, getActiveCategories } from '@/services/productService';
 import type { Metadata } from 'next';
 import type { Product } from '@/lib/types';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Wind, Shell, ShoppingBag, VenetianMask } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
 
 export const metadata: Metadata = {
   title: 'Accueil',
@@ -16,9 +19,22 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
+// Category icon mapping
+const categoryIcons: Record<string, LucideIcon> = {
+  'Hijab': Wind,
+  'Turban': Shell,
+  'Casquette': VenetianMask,
+  'Abaya': ShoppingBag,
+  'Robe': ShoppingBag,
+  'Ensemble': ShoppingBag,
+  'Default': ShoppingBag,
+};
+
+
 export default async function HomePage() {
   const featuredProducts: Product[] = await getFeaturedProducts(4);
   const newArrivals: Product[] = await getNewArrivals(3);
+  const activeCategories: string[] = await getActiveCategories();
 
 
   return (
@@ -49,6 +65,38 @@ export default async function HomePage() {
           </Button>
         </div>
       </section>
+
+      {/* Dynamic Categories Section */}
+      {activeCategories.length > 0 && (
+        <section>
+          <PageHeader title="Parcourir par Catégorie" description="Trouvez exactement ce que vous cherchez en explorant nos collections." />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+            {activeCategories.map(category => {
+              const Icon = categoryIcons[category] || categoryIcons['Default'];
+              return (
+                <Link
+                  key={category}
+                  href={`/products?category=${encodeURIComponent(category)}`}
+                  className="group"
+                >
+                  <div className={cn(
+                    "flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-transparent transition-all duration-300",
+                    "bg-muted/40 hover:bg-card hover:border-primary/50 hover:shadow-lg hover:-translate-y-1"
+                  )}>
+                    <div className="p-4 rounded-full bg-primary/10 mb-4">
+                      <Icon className="h-8 w-8 text-primary" />
+                    </div>
+                    <span className="text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                      {category}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
 
       {/* Featured Products */}
       <section>
